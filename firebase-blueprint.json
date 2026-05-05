@@ -1,0 +1,147 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Base user entity with role-based access",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "student", "faculty", "recruiter"] },
+        "branch": { "type": "string" },
+        "year": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "StudentStats": {
+      "title": "Student Stats",
+      "description": "Coding performance and SDE readiness",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "githubUsername": { "type": "string" },
+        "leetcodeUsername": { "type": "string" },
+        "githubData": { "type": "object" },
+        "leetcodeData": { "type": "object" },
+        "sdeReadinessScore": { "type": "number" },
+        "lastUpdated": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId"]
+    },
+    "AttendanceSession": {
+      "title": "Attendance Session",
+      "description": "A class session where attendance was marked",
+      "type": "object",
+      "properties": {
+        "subjectId": { "type": "string" },
+        "facultyId": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "presentStudents": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["subjectId", "facultyId", "date"]
+    },
+    "FacultyAttendance": {
+      "title": "Faculty Attendance",
+      "description": "Daily login/logout for faculty",
+      "type": "object",
+      "properties": {
+        "facultyId": { "type": "string" },
+        "date": { "type": "string" },
+        "checkIn": { "type": "string", "format": "date-time" },
+        "checkOut": { "type": "string", "format": "date-time" },
+        "lecturesTaken": { "type": "number" }
+      },
+      "required": ["facultyId", "date", "checkIn"]
+    },
+    "SalaryRecord": {
+      "title": "Salary Record",
+      "description": "Monthly salary calculation for faculty",
+      "type": "object",
+      "properties": {
+        "facultyId": { "type": "string" },
+        "month": { "type": "string" },
+        "baseSalary": { "type": "number" },
+        "lectureBonus": { "type": "number" },
+        "deductions": { "type": "number" },
+        "totalSalary": { "type": "number" },
+        "status": { "type": "string", "enum": ["draft", "approved", "paid"] },
+        "approvedBy": { "type": "string" }
+      },
+      "required": ["facultyId", "month", "totalSalary"]
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "Academic subjects assigned to faculty",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "facultyId": { "type": "string" },
+        "branch": { "type": "string" },
+        "year": { "type": "string" }
+      },
+      "required": ["name", "facultyId"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "System or faculty announcements",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "authorId": { "type": "string" },
+        "role": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "content", "authorId"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Student software projects",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "studentId": { "type": "string" },
+        "status": { "type": "string" },
+        "githubUrl": { "type": "string" }
+      },
+      "required": ["title", "studentId", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/student_stats/{studentId}": {
+      "schema": "StudentStats",
+      "description": "Coding and readiness stats"
+    },
+    "/attendance_sessions/{sessionId}": {
+      "schema": "AttendanceSession",
+      "description": "Student attendance sessions"
+    },
+    "/faculty_attendance/{attendanceId}": {
+      "schema": "FacultyAttendance",
+      "description": "Daily faculty check-ins"
+    },
+    "/salary_records/{recordId}": {
+      "schema": "SalaryRecord",
+      "description": "Monthly salary reports"
+    },
+    "/subjects/{subjectId}": {
+      "schema": "Subject",
+      "description": "Academic subjects"
+    },
+    "/announcements/{announcementId}": {
+      "schema": "Announcement",
+      "description": "Global or role-specific news"
+    },
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Student projects"
+    }
+  }
+}

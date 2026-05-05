@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function hasRole(role) {
+      return isSignedIn() && getUserRole() == role;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User Profiles
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId) && request.resource.data.role in ['student', 'recruiter'];
+      allow update: if isOwner(userId) && (
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) ||
+        hasRole('admin')
+      );
+    }
+
+    // Student Stats
+    match /student_stats/{studentId} {
+      allow read: if isSignedIn() && (isOwner(studentId) || hasRole('recruiter') || hasRole('admin'));
+      allow write: if isOwner(studentId) || hasRole('admin');
+    }
+
+    // Attendance Sessions
+    match /attendance_sessions/{sessionId} {
+      allow read: if isSignedIn();
+      allow create: if hasRole('faculty') || hasRole('admin');
+      allow update, delete: if hasRole('admin') || (hasRole('faculty') && resource.data.facultyId == request.auth.uid);
+    }
+
+    // Faculty Attendance
+    match /faculty_attendance/{attendanceId} {
+      allow read: if hasRole('admin') || (hasRole('faculty') && resource.data.facultyId == request.auth.uid);
+      allow create: if hasRole('faculty') || hasRole('admin');
+    }
+
+    // Salary Records
+    match /salary_records/{recordId} {
+      allow read: if hasRole('admin') || (hasRole('faculty') && resource.data.facultyId == request.auth.uid);
+      allow write: if hasRole('admin');
+    }
+
+    // Subjects
+    match /subjects/{subjectId} {
+      allow read: if isSignedIn();
+      allow write: if hasRole('admin');
+    }
+  }
+}

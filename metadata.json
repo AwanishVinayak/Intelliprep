@@ -1,0 +1,6 @@
+{
+  "name": "IntelliPrep",
+  "description": "Smart Academic + Coding Analytics Platform for students, faculty, and recruiters. Tracks academic attendance, coding performance (GitHub/LeetCode), and handles faculty payroll.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
