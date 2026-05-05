@@ -34,7 +34,7 @@ Start the development server:
 npm run dev
 ```
 
-The application will be available at 
+The application will be available at https://intelliprep-4g9w.onrender.com/login
  Features
 - **Student Dashboard**: Track GitHub commits, LeetCode progress, and watch learning content.
 - **Faculty Dashboard**: Manage attendance, payroll, and view student analytics.
