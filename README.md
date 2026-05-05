@@ -34,15 +34,18 @@ Start the development server:
 npm run dev
 ```
 
-The application will be available at `http://localhost:3000`.
-
-## Features
+The application will be available at 
+ Features
 - **Student Dashboard**: Track GitHub commits, LeetCode progress, and watch learning content.
 - **Faculty Dashboard**: Manage attendance, payroll, and view student analytics.
 - **Recruiter View**: Discover top technical talent based on verified coding metrics.
 - **Admin Console**: System-wide configuration and global overviews.
 
-## Tech Stack
-- Frontend: React 18, Vite, Tailwind CSS, Recharts, Lucide Icons, Motion.
-- Backend: Express (Proxying for local development).
-- Database: Firebase/Firestore.
+Tech Stack Used:
+Frontend: React 18, Vite (for blazing-fast builds)
+Styling: Tailwind CSS (brutalist/modern UI architecture)
+Data Visualization: Recharts (dynamic progress tracking)
+Animations: Motion (smooth state transitions)
+Backend: Node.js & Express
+Database & Auth: Firebase / Firestore (real-time data & high security)
+Icons: Lucide-React
